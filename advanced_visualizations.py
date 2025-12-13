@@ -86,10 +86,10 @@ print("  ✓ Kaydedildi: viz_1_pie_military_vs_civil.png")
 plt.close()
 
 
-# GRAFİK 2: YATAY BAR CHART - En Çok Kaza Yapan 15 Operatör
+# GRAFİK 2: YATAY BAR CHART - En Çok Kaza Yapan 20 Operatör
 print("[2/10] Yatay Bar Chart: En Çok Kaza Yapan Operatörler")
 
-top_operators = df['Operator'].value_counts().head(15)
+top_operators = df['Operator'].value_counts().head(20)
 
 fig, ax = plt.subplots(figsize=(12, 8))
 bars = ax.barh(range(len(top_operators)), top_operators.values, 
@@ -98,7 +98,7 @@ bars = ax.barh(range(len(top_operators)), top_operators.values,
 ax.set_yticks(range(len(top_operators)))
 ax.set_yticklabels(top_operators.index, fontsize=10)
 ax.set_xlabel('Kaza Sayısı', fontsize=12, weight='bold')
-ax.set_title('En Çok Kaza Yapan 15 Operatör (1908-2023)', fontsize=14, weight='bold')
+ax.set_title(f'En Çok Kaza Yapan 20 Operatör ({df["Year"].min()}-{df["Year"].max()})', fontsize=14, weight='bold')
 ax.invert_yaxis()
 
 for i, (bar, value) in enumerate(zip(bars, top_operators.values)):
@@ -157,8 +157,12 @@ line2 = ax2.plot(decade_stats.index, decade_stats['Fatalities'],
                  color=color2, marker='s', linewidth=3, markersize=8, label='Ölüm Sayısı')
 ax2.tick_params(axis='y', labelcolor=color2)
 
-ax1.set_title('Havacılık Kazaları ve Ölümleri - Dekat Bazlı Trend (1908-2023)', 
+ax1.set_title(f'Havacılık Kazaları ve Ölümleri - Dekat Bazlı Trend ({df["Year"].min()}-{df["Year"].max()})', 
               fontsize=14, weight='bold')
+
+# X ekseninde tüm dekatları göster
+ax1.set_xticks(decade_stats.index)
+ax1.set_xticklabels(decade_stats.index, rotation=45, ha='right')
 
 lines = line1 + line2
 labels = [l.get_label() for l in lines]
@@ -293,8 +297,14 @@ ax.plot(cumulative_fatalities.index, cumulative_fatalities.values,
 
 ax.set_xlabel('Yıl', fontsize=12, weight='bold')
 ax.set_ylabel('Kümülatif Ölüm Sayısı', fontsize=12, weight='bold')
-ax.set_title('Havacılık Tarihinde Kümülatif Ölüm Sayısı (1908-2023)', 
+ax.set_title(f'Havacılık Tarihinde Kümülatif Ölüm Sayısı ({df["Year"].min()}-{df["Year"].max()})', 
              fontsize=14, weight='bold')
+
+# X ekseninde her 10 yılda bir etiket göster
+year_ticks = range(df['Year'].min(), df['Year'].max() + 1, 10)
+ax.set_xticks(year_ticks)
+ax.set_xticklabels(year_ticks, rotation=45, ha='right')
+
 ax.grid(True, alpha=0.3)
 ax.legend(fontsize=11)
 
@@ -313,7 +323,7 @@ plt.close()
 # GRAFİK 10: BOX PLOT - Dekatlara Göre Kaza Başına Ölüm Sayısı
 print("[10/10] Box Plot: Dekatlara Göre Kaza Başına Ölüm Dağılımı")
 
-# Son 100 yılı al (daha okunabilir olması için)
+# Son 100 yılı
 recent_df = df[df['Year'] >= 1920]
 
 fig, ax = plt.subplots(figsize=(14, 7))
@@ -332,7 +342,7 @@ for patch, color in zip(bp['boxes'], colors_box):
 
 ax.set_xlabel('Dekat', fontsize=12, weight='bold')
 ax.set_ylabel('Kaza Başına Ölüm Sayısı', fontsize=12, weight='bold')
-ax.set_title('Dekatlara Göre Kaza Başına Ölüm Sayısı Dağılımı (1920-2023)', 
+ax.set_title(f'Dekatlara Göre Kaza Başına Ölüm Sayısı Dağılımı (1920-{df["Year"].max()})', 
              fontsize=14, weight='bold')
 ax.grid(axis='y', alpha=0.3)
 ax.set_xticklabels(ax.get_xticklabels(), rotation=45)
